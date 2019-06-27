@@ -16,23 +16,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        detectRequest.cpp \
-        loginrequest.cpp \
         main.cpp \
-        request.cpp \
         tevianexchanger.cpp
+
+LIBS += "../../DLL/tevianDLL.dll"
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-LIBS += "../DLL/tevianDLL.dll"
-
 HEADERS += \
-    detectRequest.h \
-    loginrequest.h \
-    request.h \
-    teviandll.h \
-    teviandll_global.h \
-    tevianexchanger.h
+    tevianexchanger.h  \
+

@@ -2,7 +2,7 @@
 #define TEVIANEXHANGER_H
 
 #include <QObject>
-#include "teviandll.h"
+#include "../../DLL/teviandll.h"
 #include <iostream>
 
 using namespace std;
