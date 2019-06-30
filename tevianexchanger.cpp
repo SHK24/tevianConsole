@@ -35,9 +35,19 @@ void TevianExchanger::loginSuccess(QString token)
 
 void TevianExchanger::detectSuccess(QByteArray rawJSON)
 {
+    cout<<"->"<<lastFile.toUtf8().data()<<endl;
     cout<<rawJSON.data()<<endl;
 
-    app->exit();
+    if(images.count() > 0)
+    {
+        images.pop_front();
+
+        processNextImage();
+    }
+    else {
+        cout<<"All images has been processed" << endl;
+        app->exit();
+    }
 }
 
 void TevianExchanger::doLogin(QString url, QString email, QString password)
@@ -45,7 +55,33 @@ void TevianExchanger::doLogin(QString url, QString email, QString password)
     tev.doLogin(url, email, password);
 }
 
-void TevianExchanger::detect(QString url, QString imagePath, QString token)
+void TevianExchanger::processNextImage()
 {
-    tev.detect(url, imagePath, token);
+    if(images.count() > 0)
+    {
+        if(!QFile(images[0]).open(QIODevice::ReadOnly))
+        {
+            cout<<"Image "<<images[0].toUtf8().data()<<" not found"<<endl;
+
+            images.pop_front();
+            processNextImage();
+
+            return;
+        }
+        tev.detect(detectUrl, images[0], token);
+        lastFile = images[0];
+    }
+}
+
+void TevianExchanger::detect(QString url, QStringList imagePaths, QString token)
+{
+    if(imagePaths.count() == 0)
+    {
+        cout << "Images list is empty" << endl;
+        return;
+    }
+    detectUrl = url;
+    images = imagePaths;
+    this->token = token;
+    processNextImage();
 }

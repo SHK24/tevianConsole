@@ -13,6 +13,10 @@ class TevianExchanger : public QObject
     Q_OBJECT
 
     TevianDLL tev;
+    QString lastFile;
+    QString detectUrl;
+    QString token;
+    QStringList images;
     QCoreApplication * app;
 
 public:
@@ -22,7 +26,8 @@ public:
     void detectSuccess(QByteArray rawJSON);
 
     void doLogin(QString url, QString email, QString password);               //Выполнить login
-    void detect(QString url, QString imagePath, QString token);               //Выполнить распознавание
+    void detect(QString url, QStringList imagePaths, QString token);               //Выполнить распознавание
+    void processNextImage();
 };
 
 #endif // TEVIANEXHANGER_H

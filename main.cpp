@@ -32,37 +32,51 @@ int main(int argc, char *argv[])
 
     TevianExchanger test(&a);
 
-    QFile credentials("credentials.txt");
-    if(!credentials.open(QIODevice::ReadOnly))
-    {
-        cout << "Credentials file not found!" << endl;
-    }
-
+//    QFile credentials("credentials.txt");
+//    if(!credentials.open(QIODevice::ReadOnly))
+//    {
+//        cout << "Credentials file not found!" << endl;
+//    }
 
     if(createToken)
     {
         QStringList creds = parser.value(createTokenOption).split(':');
 
-        if(creds.count() < 2)
+        QFile credentials("credentials.txt");
+        if(!credentials.open(QIODevice::ReadOnly))
         {
-            cout << "Login data is not full!" <<endl;
-            return 2;
+            cout<<"Credentials not found"<<endl;
+            a.exit();
         }
+        else
+        {
+            if(creds.count() < 2)
+            {
+                cout << "Login data is not full!" <<endl;
+                return 2;
+            }
 
-        test.doLogin("https://backend.facecloud.tevian.ru/api/v1/login",creds[0], creds[1]);
+            test.doLogin("https://backend.facecloud.tevian.ru/api/v1/login",creds[0], creds[1]);
+        }
     }
 
     if(detect)
     {
-        QString imagePath = parser.value(detectOption);
+        QStringList imagePaths = parser.value(detectOption).split(';');
 
         QFile credentials("credentials.txt");
-        credentials.open(QIODevice::ReadOnly);
-        QString token = credentials.readAll();
-        credentials.close();
+        if(!credentials.open(QIODevice::ReadOnly))
+        {
+            cout<<"Credentials not found"<<endl;
+            a.exit();
+        }
+        else
+        {
+            QString token = credentials.readAll();
+            credentials.close();
 
-
-        test.detect("https://backend.facecloud.tevian.ru/api/v1/detect?demographics=true",imagePath, token);
+            test.detect("https://backend.facecloud.tevian.ru/api/v1/detect?demographics=true",imagePaths, token);
+        }
     }
     return a.exec();
 }
