@@ -29,3 +29,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     tevianexchanger.h  \
 
+DISTFILES += \
+    CMakeLists.txt
+

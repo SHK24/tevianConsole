@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     parser.addHelpOption();
 
     QCommandLineOption createTokenOption(QStringList() << "c" << "createToken",
-           QCoreApplication::translate("main", "Create token for email:password pair"));
+           QCoreApplication::translate("main", "Create token for email:password pair"), "-c");
     parser.addOption(createTokenOption);
 
     QCommandLineOption detectOption(QStringList() << "d" << "detect",
@@ -45,8 +45,15 @@ int main(int argc, char *argv[])
 
     if(createToken)
     {
-        test.doLogin("https://backend.facecloud.tevian.ru/api/v1/login","sergeishk@gmail.com", "teviantest");
-        a.exit();
+        QStringList creds = parser.value(createTokenOption).split(':');
+
+        if(creds.count() < 2)
+        {
+            cout << "Login data is not full!" <<endl;
+            return 2;
+        }
+
+        test.doLogin("https://backend.facecloud.tevian.ru/api/v1/login",creds[0], creds[1]);
     }
 
     if(detect)
@@ -60,7 +67,6 @@ int main(int argc, char *argv[])
 
 
         test.detect("https://backend.facecloud.tevian.ru/api/v1/detect?demographics=true",imagePath, token);
-
     }
     return a.exec();
 }
