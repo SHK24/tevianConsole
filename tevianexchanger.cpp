@@ -1,11 +1,13 @@
 #include "tevianexchanger.h"
 
 
-TevianExchanger::TevianExchanger()
+TevianExchanger::TevianExchanger(QCoreApplication * app)
 {
     connect(&tev, &TevianDLL::loginSuccess,  this, &TevianExchanger::loginSuccess);
     connect(&tev, &TevianDLL::requestError,  this, &TevianExchanger::requestError);
     connect(&tev, &TevianDLL::detectSuccess, this, &TevianExchanger::detectSuccess);
+
+    this->app = app;
 }
 
 void TevianExchanger::requestError(QString errorMessage)
@@ -27,11 +29,15 @@ void TevianExchanger::loginSuccess(QString token)
 
     credentials.write(token.toUtf8());
     credentials.close();
+
+    app->exit();
 }
 
 void TevianExchanger::detectSuccess(QByteArray rawJSON)
 {
     cout<<rawJSON.data()<<endl;
+
+    app->exit();
 }
 
 void TevianExchanger::doLogin(QString url, QString email, QString password)

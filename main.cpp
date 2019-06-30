@@ -25,16 +25,12 @@ int main(int argc, char *argv[])
            QCoreApplication::translate("main", "Detect faces on specified image"), "-d");
     parser.addOption(detectOption);
 
-    // Process the actual command line arguments given by the user
     parser.process(a);
-
-    //const QStringList args = parser.positionalArguments();
-    // source is args.at(0), destination is args.at(1)
 
     bool createToken    = parser.isSet(createTokenOption);
     bool detect         = parser.isSet(detectOption);
 
-    TevianExchanger test;
+    TevianExchanger test(&a);
 
     QFile credentials("credentials.txt");
     if(!credentials.open(QIODevice::ReadOnly))

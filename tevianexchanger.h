@@ -2,8 +2,9 @@
 #define TEVIANEXHANGER_H
 
 #include <QObject>
-#include "../../DLL/teviandll.h"
 #include <iostream>
+#include <QCoreApplication>
+#include "../../DLL/teviandll.h"
 
 using namespace std;
 
@@ -12,9 +13,10 @@ class TevianExchanger : public QObject
     Q_OBJECT
 
     TevianDLL tev;
+    QCoreApplication * app;
 
 public:
-    TevianExchanger();
+    TevianExchanger(QCoreApplication * app);
     void requestError(QString errorMessage);
     void loginSuccess(QString token);
     void detectSuccess(QByteArray rawJSON);
