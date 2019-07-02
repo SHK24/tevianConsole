@@ -17,7 +17,9 @@ class TevianExchanger : public QObject
     QString detectUrl;
     QString token;
     QStringList images;
-    QCoreApplication * app;
+    bool status;
+signals:
+    void requestDone();
 
 public:
     TevianExchanger(QCoreApplication * app);
@@ -28,6 +30,7 @@ public:
     void doLogin(QString url, QString email, QString password);               //Выполнить login
     void detect(QString url, QStringList imagePaths, QString token);               //Выполнить распознавание
     void processNextImage();
+    bool getStatus();
 };
 
 #endif // TEVIANEXHANGER_H

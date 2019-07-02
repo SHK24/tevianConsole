@@ -1,12 +1,17 @@
-#include <QCoreApplication>
-#include <QCommandLineParser>
+#include <QFile>
+#include <QObject>
 #include <QLibrary>
 #include <iostream>
-#include <QObject>
-#include <QFile>
+#include <QCoreApplication>
 #include "tevianexchanger.h"
+#include <QCommandLineParser>
 
 using namespace std;
+
+void closeApplication()
+{
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -30,13 +35,13 @@ int main(int argc, char *argv[])
     bool createToken    = parser.isSet(createTokenOption);
     bool detect         = parser.isSet(detectOption);
 
-    TevianExchanger test(&a);
+    if((!createToken) && (!detect))
+    {
+        cout<< "No parameters detected!" << endl;
+//        a.exit();
+    }
 
-//    QFile credentials("credentials.txt");
-//    if(!credentials.open(QIODevice::ReadOnly))
-//    {
-//        cout << "Credentials file not found!" << endl;
-//    }
+    TevianExchanger test(&a);
 
     if(createToken)
     {
@@ -58,7 +63,7 @@ int main(int argc, char *argv[])
         QFile credentials("credentials.txt");
         if(!credentials.open(QIODevice::ReadOnly))
         {
-            cout<<"Credentials not found"<<endl;
+            cout<<"Credentials file not found"<<endl;
             a.exit();
         }
         else
@@ -69,5 +74,11 @@ int main(int argc, char *argv[])
             test.detect("https://backend.facecloud.tevian.ru/api/v1/detect?demographics=true",imagePaths, token);
         }
     }
-    return a.exec();
+
+    while(!test.getStatus())
+    {
+        a.processEvents();
+    }
+
+    a.exit();
 }

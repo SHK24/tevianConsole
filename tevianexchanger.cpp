@@ -7,12 +7,13 @@ TevianExchanger::TevianExchanger(QCoreApplication * app)
     connect(&tev, &TevianDLL::requestError,  this, &TevianExchanger::requestError);
     connect(&tev, &TevianDLL::detectSuccess, this, &TevianExchanger::detectSuccess);
 
-    this->app = app;
+    status = false;
 }
 
 void TevianExchanger::requestError(QString errorMessage)
 {
     cout <<errorMessage.toUtf8().data() << endl;
+    status = true;
 }
 
 void TevianExchanger::loginSuccess(QString token)
@@ -24,13 +25,14 @@ void TevianExchanger::loginSuccess(QString token)
     if(!credentials.open(QIODevice::WriteOnly))
     {
         cout<<"Can't create credentials file!"<<endl;
+        status = true;
         return;
     }
 
     credentials.write(token.toUtf8());
     credentials.close();
 
-    app->exit();
+    status = true;
 }
 
 void TevianExchanger::detectSuccess(QByteArray rawJSON)
@@ -46,7 +48,7 @@ void TevianExchanger::detectSuccess(QByteArray rawJSON)
     }
     else {
         cout<<"All images has been processed" << endl;
-        app->exit();
+        status = true;
     }
 }
 
@@ -71,6 +73,11 @@ void TevianExchanger::processNextImage()
         tev.detect(detectUrl, images[0], token);
         lastFile = images[0];
     }
+}
+
+bool TevianExchanger::getStatus()
+{
+    return status;
 }
 
 void TevianExchanger::detect(QString url, QStringList imagePaths, QString token)
