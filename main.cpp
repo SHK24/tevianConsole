@@ -42,22 +42,13 @@ int main(int argc, char *argv[])
     {
         QStringList creds = parser.value(createTokenOption).split(':');
 
-        QFile credentials("credentials.txt");
-        if(!credentials.open(QIODevice::ReadOnly))
+        if(creds.count() < 2)
         {
-            cout<<"Credentials not found"<<endl;
-            a.exit();
+            cout << "Login data is not full!" <<endl;
+            return 2;
         }
-        else
-        {
-            if(creds.count() < 2)
-            {
-                cout << "Login data is not full!" <<endl;
-                return 2;
-            }
 
-            test.doLogin("https://backend.facecloud.tevian.ru/api/v1/login",creds[0], creds[1]);
-        }
+        test.doLogin("https://backend.facecloud.tevian.ru/api/v1/login",creds[0], creds[1]);
     }
 
     if(detect)
