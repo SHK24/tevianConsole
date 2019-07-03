@@ -5,7 +5,7 @@
 #include <iostream>
 #include <jsonparser.h>
 #include <QCoreApplication>
-#include "../../DLL/teviandll.h"
+#include "teviandll.h"
 
 using namespace std;
 
