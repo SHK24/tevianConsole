@@ -25,7 +25,9 @@ FaceDescription jsonParser::getFaceBox(QByteArray replyBody)
 
     QJsonObject obj = doc.object();
 
-    QList<QVariant> data = obj["data"].toVariant().toList();
+    QList<QVariant> data = doc.object().value("data").toVariant().toList();
+
+    //QList<QVariant> data = obj["data"].toVariant().toList();
 
     FaceDescription faceDesc;
 

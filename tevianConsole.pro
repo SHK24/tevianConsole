@@ -20,7 +20,10 @@ SOURCES += \
         main.cpp \
         tevianexchanger.cpp
 
-LIBS += "../../DLL/tevianDLLd.dll"
+win32{
+    debug:LIBS += "../../DLL/tevianDLLd.dll"
+    release:LIBS += "../../DLL/tevianDLL.dll"
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
