@@ -1,7 +1,7 @@
 #include "tevianexchanger.h"
 
 
-TevianExchanger::TevianExchanger(QCoreApplication * app)
+TevianExchanger::TevianExchanger()
 {
     connect(&tev, &TevianDLL::loginSuccess,  this, &TevianExchanger::loginSuccess);
     connect(&tev, &TevianDLL::requestError,  this, &TevianExchanger::requestError);
@@ -16,7 +16,7 @@ void TevianExchanger::requestError(QString errorMessage)
     status = true;
 }
 
-void TevianExchanger::loginSuccess(QString token)
+void TevianExchanger::loginSuccess(QByteArray jsonData)
 {
     cout<<"---------Login result------"<<endl;
     cout<<"Login is OK! Your JWT token has been storaged in credentials.txt" << endl;
@@ -28,6 +28,10 @@ void TevianExchanger::loginSuccess(QString token)
         status = true;
         return;
     }
+
+    jsonParser parser;
+
+    QString token = parser.getToken(jsonData);
 
     credentials.write(token.toUtf8());
     credentials.close();
