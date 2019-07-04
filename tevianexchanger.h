@@ -31,6 +31,9 @@ class TevianExchanger : public QObject
     ///Список изображения для обработки
     QStringList images;
 
+    ///Переменная для хранения данных авторизации
+    QString credPath;
+
     ///Состояние обмена
     bool status;
 
@@ -63,6 +66,9 @@ public:
 
     ///Метод выполняющий обработку следующего изображения из списка
     void processNextImage();
+
+    ///Метод для передачи пути сохранения данных авторизации
+    void setCredentialsPath(QString path);
 
     ///Метод выдачи состояния запроса
     bool getStatus();

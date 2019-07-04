@@ -24,6 +24,10 @@ int main(int argc, char *argv[])
     QCommandLineOption detectOption(QStringList() << "d" << "detect",
            QCoreApplication::translate("main", "Detect faces on specified image"), "-d");
     parser.addOption(detectOption);
+
+    QCommandLineOption credPathOption(QStringList() << "p" << "path",
+           QCoreApplication::translate("main", "Set directory to storage or read credentials"), "-p");
+    parser.addOption(credPathOption);
     ///------------------------------------------------------------------------------------------------------------------------
 
     ///Определение параметров с которыми было запущено приложение
@@ -35,6 +39,9 @@ int main(int argc, char *argv[])
     ///Детектирование опции распознавания
     bool detect         = parser.isSet(detectOption);
 
+    ///Детектирование опции распознавания
+    bool path          = parser.isSet(credPathOption);
+
     ///Если ни один параметр не был определен - закончить выполнение
     if((!createToken) && (!detect))
     {
@@ -44,6 +51,17 @@ int main(int argc, char *argv[])
 
     ///Создание экземпляра для обмена с backend сервером
     TevianExchanger test;
+    QString credPath;
+
+    if(path)
+    {
+        credPath = parser.value(credPathOption) + "/credentials.txt";
+    }
+    else {
+        credPath = "credentials.txt";
+    }
+
+    test.setCredentialsPath(credPath);
 
     ///Если была установлена опция создания токена
     if(createToken)
@@ -68,7 +86,7 @@ int main(int argc, char *argv[])
         QStringList imagePaths = parser.value(detectOption).split(';');
 
         ///Чтение токена из файла - завершение программы при неудачном чтении
-        QFile credentials("credentials.txt");
+        QFile credentials(credPath);
         if(!credentials.open(QIODevice::ReadOnly))
         {
             cout<<"Credentials file not found"<<endl;

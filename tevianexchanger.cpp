@@ -27,7 +27,7 @@ void TevianExchanger::loginSuccess(QByteArray jsonData)
 {
     cout<<"---------Login result------"<<endl;
     cout<<"Login is OK! Your JWT token has been storaged in credentials.txt" << endl;
-    QFile credentials("credentials.txt");
+    QFile credentials(credPath);
 
     if(!credentials.open(QIODevice::WriteOnly))
     {
@@ -86,6 +86,11 @@ void TevianExchanger::processNextImage()
         cout<<"All images has been processed" << endl;
         status = true;
     }
+}
+
+void TevianExchanger::setCredentialsPath(QString path)
+{
+    credPath = path;
 }
 
 bool TevianExchanger::getStatus()
