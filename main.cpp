@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     if((!createToken) && (!detect))
     {
         cout<< "No parameters detected!" << endl;
-        a.exit();
+        return 3;
     }
 
     ///Создание экземпляра для обмена с backend сервером
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         if(!credentials.open(QIODevice::ReadOnly))
         {
             cout<<"Credentials file not found"<<endl;
-            a.exit();
+            return 4;
         }
         else
         {
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
             if(token == "")
             {
                 cout<<"JWT is empty"<<endl;
-                return 3;
+                return 1;
             }
 
             credentials.close();
