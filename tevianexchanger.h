@@ -1,10 +1,13 @@
 #ifndef TEVIANEXHANGER_H
 #define TEVIANEXHANGER_H
 
+#include <QTimer>
 #include <QObject>
 #include <iostream>
 #include <jsonparser.h>
 #include <QCoreApplication>
+
+
 #include "teviandll.h"
 
 using namespace std;
@@ -30,12 +33,18 @@ class TevianExchanger : public QObject
 
     ///Состояние обмена
     bool status;
+
+    ///Таймер ожидания ответа
+    QTimer responseTimer;
 signals:
     void requestDone();
 
 public:
     ///Конструктор
     TevianExchanger();
+
+    ///Обработчик таймаута ответа
+    void responseTimeout();
 
     ///Обработчик сигнала об ошибке запроса
     void requestError(QString errorMessage);

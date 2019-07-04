@@ -6,8 +6,15 @@ TevianExchanger::TevianExchanger()
     connect(&tev, &TevianDLL::loginSuccess,  this, &TevianExchanger::loginSuccess);
     connect(&tev, &TevianDLL::requestError,  this, &TevianExchanger::requestError);
     connect(&tev, &TevianDLL::detectSuccess, this, &TevianExchanger::detectSuccess);
+    connect(&responseTimer, &QTimer::timeout, this, &TevianExchanger::responseTimeout);
 
     status = false;
+}
+
+void TevianExchanger::responseTimeout()
+{
+    cout<<"Response timeout error!"<<endl;
+    responseTimer.stop();
 }
 
 void TevianExchanger::requestError(QString errorMessage)
@@ -50,15 +57,12 @@ void TevianExchanger::detectSuccess(QByteArray rawJSON)
 
         processNextImage();
     }
-    else {
-        cout<<"All images has been processed" << endl;
-        status = true;
-    }
 }
 
 void TevianExchanger::doLogin(QString url, QString email, QString password)
 {
     tev.doLogin(url, email, password);
+    responseTimer.start(10000);
 }
 
 void TevianExchanger::processNextImage()
@@ -76,6 +80,11 @@ void TevianExchanger::processNextImage()
         }
         tev.detect(detectUrl, images[0], token);
         lastFile = images[0];
+        responseTimer.start(10000);
+    }
+    else {
+        cout<<"All images has been processed" << endl;
+        status = true;
     }
 }
 

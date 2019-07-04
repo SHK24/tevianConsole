@@ -20,16 +20,25 @@ FaceDescription jsonParser::getFaceBox(QByteArray replyBody)
 {
     QJsonParseError parseError;
     QList<FaceDescription> faceList;
+    FaceDescription faceDesc;
+
+    if(replyBody.count() == 0)
+    {
+        faceDesc.status = false;
+        return faceDesc;
+    }
 
     QJsonDocument doc = QJsonDocument::fromJson(replyBody, &parseError);
 
+    if(parseError.error != 0)
+    {
+        faceDesc.status = false;
+        return faceDesc;
+    }
+
     QJsonObject obj = doc.object();
 
-    QList<QVariant> data = doc.object().value("data").toVariant().toList();
-
-    //QList<QVariant> data = obj["data"].toVariant().toList();
-
-    FaceDescription faceDesc;
+    QList<QVariant> data = obj["data"].toVariant().toList();
 
     QMap<QString, QVariant> faceBbox = data[0].toMap()["bbox"].toMap();
     QMap<QString, QVariant> age      = data[0].toMap()["demographics"].toMap()["age"].toMap();

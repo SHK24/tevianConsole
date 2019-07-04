@@ -78,6 +78,13 @@ int main(int argc, char *argv[])
         {
             ///Выполнение запроса на распознавание в случае удачного чтения токена
             QString token = credentials.readAll();
+
+            if(token == "")
+            {
+                cout<<"JWT is empty"<<endl;
+                return 3;
+            }
+
             credentials.close();
 
             test.detect("https://backend.facecloud.tevian.ru/api/v1/detect?demographics=true",imagePaths, token);

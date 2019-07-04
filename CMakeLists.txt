@@ -20,8 +20,6 @@ set(tevianConsole_SRCS
 
 set (PROJECT_LINK_LIBS ${CMAKE_CURRENT_BINARY_DIR}/libtevianDLL.dll)
 
-message(${CMAKE_CURRENT_BINARY_DIR})
-
 add_executable(tevianConsole ${tevianConsole_SRCS})
 
 target_link_libraries(tevianConsole Qt5::Core Qt5::Network)
